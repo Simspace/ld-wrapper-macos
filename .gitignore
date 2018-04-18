@@ -19,5 +19,7 @@ cabal.sandbox.config
 cabal.project.local
 .HTF/
 
+panic/
+
 # macOS ld wrapper script stuff
 .ld-wrapper-macos/
