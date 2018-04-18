@@ -36,7 +36,7 @@ ghc: panic! (the 'impossible' happened)
 
 This issue occurs most often when GHC is loading its temporary `libghc_<numbers>.dylib` file that is used as part of Template Haskell codegen. This `.dylib` file dynamically links in just about all of a project's dependencies - both direct and indirect - and can easily exceed the Mach-O header size limit for medium to large-size projects.
 
-Note that macOS does not impose a restriction on the creation of dynamic libraries with header sizes over the threshold. In the above GHC panic example, the `libghc_13.dylib` file was successfully created. The OS restriction comes into play when the library is attempted to be loaded.
+Note that macOS does not impose a restriction on the _creation_ of dynamic libraries with header sizes over the threshold. In the above GHC panic example, the `libghc_13.dylib` file was successfully created. The OS restriction comes into play when the library is attempted to be _loaded_.
 
 The `ld.ld-wrapper-macos.sh` script provided in this repository acts as a "man in the middle" between GHC and the system `ld` linker so that libraries are never generated with header sizes over the limit. For more info on how the script works, please see the [Details](#details) section.
 
