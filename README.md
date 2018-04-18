@@ -44,7 +44,9 @@ The `ld.ld-wrapper-macos.sh` script provided in this repository acts as a "man i
 
 This repo includes another script - `gen-stack-mega-repo.sh` - that is a slight modification of the script from [this gist](https://gist.github.com/asivitz/f4b983b2374a6155ac4faaf9b61aca59). When `gen-stack-mega-repo.sh` is run, it will generate a huge `stack` megarepo containing a `panic` package and 750 dummy packages that are direct dependencies of `panic`.
 
-The `panic` package uses some Template Haskell, so GHC will be forced to create a temporary `libghc_<numbers>.dylib` that links in all the dummy dependency packages in order to successfully build the `panic` package. Trying to build the megarepo reliably reproduces the GHC panic, especially considering the 750 dummy packages each have names that are over 100 characters long and eat up a massive amount of header size when dynamically linked into the `panic` library.  The generated megarepo can be used to test the `ld.ld-wrapper-macos.sh` script:
+The `panic` package uses some Template Haskell, so GHC will be forced to create a temporary `libghc_<numbers>.dylib` that links in all the dummy dependency packages in order to successfully build the `panic` package. Trying to build the megarepo reliably reproduces the GHC panic, especially considering the 750 dummy packages each have names that are over 100 characters long and eat up a massive amount of header size when dynamically linked into the `libghc_<numbers>.dylib` library.
+
+The generated megarepo can be used to test the `ld.ld-wrapper-macos.sh` script:
 
 1. Follow the wrapper script's [installation steps](#installation)
 1. Generate the megarepo: `bash gen-stack-mega-repo.sh`
