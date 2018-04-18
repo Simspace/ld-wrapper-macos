@@ -75,7 +75,7 @@ The approach we are taking in this script is _heavily_ influenced by the changes
 * https://github.com/NixOS/nixpkgs/pull/38881
 * https://github.com/tpoechtrager/cctools-port/pull/34
 
-This script recursively re-exports the dependencies by subdividing to create a tree of reexporting delegate libraries. For example, here is the contents of `<working_dir>/.ld-wrapper-macos/lib` after this script was run successfully during TH codegen on the megarepo with 750 direct dependencies from the [Example](#example) section:
+This script recursively re-exports the dependencies by subdividing to create a tree of re-exporting delegate libraries. For example, here is the contents of `<working_dir>/.ld-wrapper-macos/lib` after this script was run successfully during TH codegen on the megarepo with 750 direct dependencies from the [Example](#example) section:
 
 ```
 .ld-wrapper-macos/lib/libghc_13-reexport-delegate-0.dylib
