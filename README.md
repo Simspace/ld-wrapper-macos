@@ -55,6 +55,8 @@ The generated megarepo can be used to test the `ld.ld-wrapper-macos.sh` script:
 1. Uncomment the `when` condition block in the top-level `package.yaml` project file so that GHC will link with the wrapper script instead of linking using `ld` directly
 1. Run `stack build panic` again and this time it should succeed
 
+Note that the above was tested using `stack` version 1.6.3 and GHC version 8.2.2.
+
 ## Details
 
 There is a `stack` issue discussing this problem here:
@@ -73,7 +75,7 @@ The approach we are taking in this script is _heavily_ influenced by the changes
 * https://github.com/NixOS/nixpkgs/pull/38881
 * https://github.com/tpoechtrager/cctools-port/pull/34
 
-This script recursively re-exports the dependencies by subdividing to create a tree of reexporting delegate libraries. For example, here is the contents of `<working_dir>/.ld-wrapper-macos/lib` after this script was run successfully during TH codegen on a project with 750 direct dependencies:
+This script recursively re-exports the dependencies by subdividing to create a tree of reexporting delegate libraries. For example, here is the contents of `<working_dir>/.ld-wrapper-macos/lib` after this script was run successfully during TH codegen on the megarepo with 750 direct dependencies from the [Example](#example) section:
 
 ```
 .ld-wrapper-macos/lib/libghc_13-reexport-delegate-0.dylib
