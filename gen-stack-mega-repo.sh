@@ -6,6 +6,11 @@ cd panic
 cat > package.yaml <<- EOM
 name: panic
 
+#when:
+#  - condition: os(darwin)
+#    ghc-options:
+#      - -optl-fuse-ld=ld-wrapper-macos.sh
+
 dependencies:
 - base
 - template-haskell

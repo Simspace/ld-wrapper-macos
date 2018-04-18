@@ -52,7 +52,7 @@ The generated megarepo can be used to test the `ld.ld-wrapper-macos.sh` script:
 1. Generate the megarepo: `bash gen-stack-mega-repo.sh`
 1. Change directories into the newly created megarepo: `cd panic`
 1. Attempt to build the megarepo: `stack build panic` (after a lengthy build of all the dummy dependency packages, the GHC panic should crop up at the end when building the `panic` package itself)
-1. Uncomment the `when` condition block in the `panic/package.yaml` project file so that GHC will link with the wrapper script instead of linking using `ld` directly
+1. Uncomment the `when` condition block in the top-level `package.yaml` project file so that GHC will link with the wrapper script instead of linking using `ld` directly
 1. Run `stack build panic` again and this time it should succeed
 
 ## Details
