@@ -75,7 +75,7 @@ The approach we are taking in this script is _heavily_ influenced by the changes
 * https://github.com/NixOS/nixpkgs/pull/38881
 * https://github.com/tpoechtrager/cctools-port/pull/34
 
-This script recursively re-exports the dependencies by subdividing to create a tree of re-exporting delegate libraries. For example, here is the contents of `<working_dir>/.ld-wrapper-macos/lib` after this script was run successfully during TH codegen on the megarepo with 750 direct dependencies from the [Example](#example) section:
+This script recursively re-exports the dependencies by subdividing to create a tree of re-exporting delegate libraries. For example, here is the contents of `panic/.ld-wrapper-macos/lib` after this script was run successfully during TH codegen on the megarepo with 750 direct dependencies from the [Example](#example) section:
 
 ```
 .ld-wrapper-macos/lib/libghc_13-reexport-delegate-0.dylib
@@ -99,9 +99,9 @@ All of the "leaf" dylibs above (the longest file paths) are the libraries that r
 ```
 $ otool -L .ld-wrapper-macos/lib/libghc_13-reexport-delegate-0.dylib
 .ld-wrapper-macos/lib/libghc_13-reexport-delegate-0.dylib:
-        <working_dir>/.ld-wrapper-macos/lib/libghc_13-reexport-delegate-0.dylib (compatibility version 0.0.0, current version 0.0.0)
-        <working_dir>/.ld-wrapper-macos/lib/libghc_13-reexport-delegate-0-reexport-delegate-0.dylib (compatibility version 0.0.0, current version 0.0.0)
-        <working_dir>/.ld-wrapper-macos/lib/libghc_13-reexport-delegate-0-reexport-delegate-1.dylib (compatibility version 0.0.0, current version 0.0.0)
+        <path_to_repo>/panic/.ld-wrapper-macos/lib/libghc_13-reexport-delegate-0.dylib (compatibility version 0.0.0, current version 0.0.0)
+        <path_to_repo>/panic/.ld-wrapper-macos/lib/libghc_13-reexport-delegate-0-reexport-delegate-0.dylib (compatibility version 0.0.0, current version 0.0.0)
+        <path_to_repo>/panic/.ld-wrapper-macos/lib/libghc_13-reexport-delegate-0-reexport-delegate-1.dylib (compatibility version 0.0.0, current version 0.0.0)
 ```
 
 The actual library GHC is intending to create - in the above example, this would be `libghc_13.dylib` - will only link against the two re-exporting libraries at the top-most level of the tree, i.e.:
