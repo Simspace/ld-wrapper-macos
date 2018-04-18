@@ -17,7 +17,7 @@ when:
 
 ## Synopsis
 
-This script wraps the raw `ld` linker to sidestep behavior in macOS Sierra and later where the OS prevents loading dynamic libraries that have a Mach-O header size over a fixed threshold of 32,768. When the size is exceeded and GHC goes to `dlopen` the `.dylib`, we get a GHC panic that looks like this:
+In macOS Sierra and later, the OS prevents loading dynamic libraries that have a Mach-O header size over a fixed threshold of 32,768. When the size is exceeded and GHC goes to `dlopen` the `.dylib`, we get a GHC panic that looks like this:
 
 ```
 ghc: panic! (the 'impossible' happened)
@@ -30,6 +30,8 @@ ghc: panic! (the 'impossible' happened)
 This issue occurs most often when GHC is loading its temporary `libghc_<numbers>.dylib` file that is used as part of Template Haskell codegen. This .dylib file dynamically links in just about all of a project's dependencies - both direct and indirect - and can easily exceed the Mach-O header size limit for medium to large-size projects.
 
 Note that macOS does not impose a restriction on the creation of dynamic libraries with header sizes over the threshold. In the above GHC panic example, the `libghc_13.dylib` file was successfully created. The OS restriction comes into play when the library is attempted to be loaded.
+
+The `ld.ld-wrapper-macos.sh` script provided in this repository acts as a "man in the middle" between GHC and the system `ld` linker so that libraries are never generated with header sizes over the limit. For more info on how the script works, please see the [Details](#details) section.
 
 ## Example
 
@@ -104,5 +106,5 @@ when:
 
 It may look strange in the above snippet that we have told GHC that the linker is `ld-wrapper-macos.sh` when the script in this repository is actually named `ld.ld-wrapper-macos.sh`.
 
-Naming the script with the `ld.` prefix exploits how `clang` looks up the linker path, so we are tricking `clang` into thinking the script is itself a linker. For details on how clang looks up the linker path, see this changeset where support for the "-fuse-ld" option was added:
+Naming the script with the `ld.` prefix exploits how `clang` looks up the linker path, so we are tricking `clang` into thinking the script is itself a linker. For details on how clang looks up the linker path, see this changeset where support for the `-fuse-ld` option was added:
 * https://reviews.llvm.org/diffusion/L/change/cfe/trunk/lib/Driver/ToolChain.cpp;211785
