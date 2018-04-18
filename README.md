@@ -15,11 +15,6 @@ when:
       - -optl-fuse-ld=ld-wrapper-macos.sh
 ```
 
-It may look strange in the above snippet that we have told GHC that the linker is `ld-wrapper-macos.sh` when the script in this repository is actually named `ld.ld-wrapper-macos.sh`.
-
-Using this prefix exploits how clang looks up the linker path, so we are tricking clang into thinking this script is itself a linker. For details on how clang looks up the linker path, see this changeset where support for the "-fuse-ld" option was added:
-* https://reviews.llvm.org/diffusion/L/change/cfe/trunk/lib/Driver/ToolChain.cpp;211785
-
 ## Synopsis
 
 This script wraps the raw `ld` linker to sidestep behavior in macOS Sierra and later where the OS prevents loading dynamic libraries that have a Mach-O header size over a fixed threshold of 32,768. When the size is exceeded and GHC goes to `dlopen` the `.dylib`, we get a GHC panic that looks like this:
@@ -95,3 +90,19 @@ The actual library GHC is intending to create - in the above example, this would
 ```
 
 As each delegate library re-exports its "children" delegate libraries, the actual library GHC is intending to create has full access to all the real Haskell dependencies re-exported by the "leaf" delegate libraries.  Most importantly, none of the generated dylibs will have a Mach-O header size over the limit imposed by macOS.
+
+---
+
+In the [Installation](#installation) section, the following snippet for `hpack`'s `package.yaml` format was provided to show an example of how to tell GHC to use the wrapper script:
+
+```yaml
+when:
+  - condition: os(darwin)
+    ghc-options:
+      - -optl-fuse-ld=ld-wrapper-macos.sh
+```
+
+It may look strange in the above snippet that we have told GHC that the linker is `ld-wrapper-macos.sh` when the script in this repository is actually named `ld.ld-wrapper-macos.sh`.
+
+Naming the script with the `ld.` prefix exploits how `clang` looks up the linker path, so we are tricking `clang` into thinking the script is itself a linker. For details on how clang looks up the linker path, see this changeset where support for the "-fuse-ld" option was added:
+* https://reviews.llvm.org/diffusion/L/change/cfe/trunk/lib/Driver/ToolChain.cpp;211785
