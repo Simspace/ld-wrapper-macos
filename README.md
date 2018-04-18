@@ -15,6 +15,13 @@ when:
       - -optl-fuse-ld=ld-wrapper-macos.sh
 ```
 
+Optionally, a project's `.gitignore` file can be updated to ignore the working directories used by the wrapper script:
+
+```
+# macOS ld wrapper script stuff
+.ld-wrapper-macos/
+```
+
 ## Synopsis
 
 In macOS Sierra and later, the OS prevents loading dynamic libraries that have a Mach-O header size over a fixed threshold of 32,768. When the size is exceeded and GHC goes to `dlopen` the `.dylib`, we get a GHC panic that looks like this:
@@ -27,7 +34,7 @@ ghc: panic! (the 'impossible' happened)
     /var/folders/49/bgbzql7j62j5z2r1r0m2m3rr0000gn/T/ghc763_0/libghc_13.dylib: stat() failed with errno=25
 ```
 
-This issue occurs most often when GHC is loading its temporary `libghc_<numbers>.dylib` file that is used as part of Template Haskell codegen. This .dylib file dynamically links in just about all of a project's dependencies - both direct and indirect - and can easily exceed the Mach-O header size limit for medium to large-size projects.
+This issue occurs most often when GHC is loading its temporary `libghc_<numbers>.dylib` file that is used as part of Template Haskell codegen. This `.dylib` file dynamically links in just about all of a project's dependencies - both direct and indirect - and can easily exceed the Mach-O header size limit for medium to large-size projects.
 
 Note that macOS does not impose a restriction on the creation of dynamic libraries with header sizes over the threshold. In the above GHC panic example, the `libghc_13.dylib` file was successfully created. The OS restriction comes into play when the library is attempted to be loaded.
 
