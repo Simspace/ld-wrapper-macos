@@ -51,7 +51,7 @@ The generated megarepo can be used to test the `ld.ld-wrapper-macos.sh` script:
 1. Follow the wrapper script's [installation steps](#installation) so that `ld.ld-wrapper-macos.sh` is available on the `PATH` and is executable.
 1. Generate the megarepo: `bash gen-stack-mega-repo.sh`
 1. Change directories into the newly created megarepo: `cd panic`
-1. Attempt to build the megarepo: `stack build panic` (after a lengthy build of all the dummy dependency packages, the GHC panic should crop up at the end when building the `panic` package itself)
+1. Attempt to build the megarepo: `stack build panic` (after a lengthy build of all 750 dummy dependency packages, the GHC panic should crop up at the end when building the `panic` package itself)
 1. Uncomment the `when` condition block in the top-level `package.yaml` project file so that GHC will link with the wrapper script instead of linking using `ld` directly
 1. Run `stack build panic` again and this time it should succeed
 
@@ -128,3 +128,9 @@ It may look strange in the above snippet that we have told GHC that the linker i
 
 Naming the script with the `ld.` prefix exploits how `clang` looks up the linker path, so we are tricking `clang` into thinking the script is itself a linker. For details on how clang looks up the linker path, see this changeset where support for the `-fuse-ld` option was added:
 * https://reviews.llvm.org/diffusion/L/change/cfe/trunk/lib/Driver/ToolChain.cpp;211785
+
+## Contributing
+
+Contributions and bug reports are certainly welcome!
+
+At [SimSpace](https://github.com/Simspace/range), we use a `stack` workflow.  There is nothing specific to `stack` in the wrapper script though and we would love to hear if it works for `cabal` workflows too.
