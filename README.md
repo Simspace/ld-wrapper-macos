@@ -1,8 +1,10 @@
 # ld-wrapper-macos
 
+Wrapper script around the `ld` linker for macOS Haskellers to work around Mach-O header size limitations imposed by macOS Sierra and later.
+
 ## Synopsis
 
-This script wraps the raw "ld" linker to sidestep behavior in macOS Sierra and later where the OS prevents loading dynamic libraries that have a mach-o header size over a fixed threshold of 32,768. When the size is exceeded and GHC goes to dlopen the .dylib, we get a GHC panic that looks like this:
+This script wraps the raw "ld" linker to sidestep behavior in macOS Sierra and later where the OS prevents loading dynamic libraries that have a mach-o header size over a fixed threshold of 32,768. When the size is exceeded and GHC goes to `dlopen` the .dylib, we get a GHC panic that looks like this:
 
 ```
 ghc: panic! (the 'impossible' happened)
