@@ -48,7 +48,7 @@ The `panic` package uses some Template Haskell, so GHC will be forced to create 
 
 The generated megarepo can be used to test the `ld.ld-wrapper-macos.sh` script:
 
-1. Follow the wrapper script's [installation steps](#installation)
+1. Follow the wrapper script's [installation steps](#installation) so that `ld.ld-wrapper-macos.sh` is available on the `PATH` and is executable.
 1. Generate the megarepo: `bash gen-stack-mega-repo.sh`
 1. Change directories into the newly created megarepo: `cd panic`
 1. Attempt to build the megarepo: `stack build panic` (after a lengthy build of all the dummy dependency packages, the GHC panic should crop up at the end when building the `panic` package itself)
