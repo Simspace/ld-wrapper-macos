@@ -133,4 +133,4 @@ Naming the script with the `ld.` prefix exploits how `clang` looks up the linker
 
 Contributions and bug reports are certainly welcome!
 
-At [SimSpace](https://github.com/Simspace/range), we use a `stack` workflow.  There is nothing specific to `stack` in the wrapper script though and we would love to hear if it works for `cabal` workflows too.
+At [SimSpace](https://github.com/Simspace), we use a `stack` workflow.  There is nothing specific to `stack` in the wrapper script though and we would love to hear if it works for `cabal` workflows too.
