@@ -22,6 +22,8 @@ Optionally, a project's `.gitignore` file can be updated to ignore the working d
 .ld-wrapper-macos/
 ```
 
+Note that if you are using a `clang` version prior to 10.0, in step 1, you will need to copy the script as `ld.ld-wrapper-macos.sh` instead of as `ld64.ld-wrapper-macos.sh`.
+
 ## Synopsis
 
 In macOS Sierra and later, the OS prevents loading dynamic libraries that have a Mach-O header size over a fixed threshold of 32,768. When the size is exceeded and GHC goes to `dlopen` the `.dylib`, we get a GHC panic that looks like this:
