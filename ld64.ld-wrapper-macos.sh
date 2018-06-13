@@ -330,14 +330,14 @@ if [[ ! -f $symbolBloatObject ]]; then
 fi
 
 # First half of libs
-ld.ld-wrapper-macos.sh -macosx_version_min "$macOSXVersionMin" -arch x86_64 -dylib \
+"$0" -macosx_version_min "$macOSXVersionMin" -arch x86_64 -dylib \
     -o "$outDir/lib/lib${children[0]}.dylib" \
     -install_name "$outDir/lib/lib${children[0]}.dylib" \
     "${childrenLookup[@]}" "$symbolBloatObject" \
     "${childrenInputs[@]:0:$((${#childrenInputs[@]} / 2 ))}"
 
 # Second half of libs
-ld.ld-wrapper-macos.sh -macosx_version_min "$macOSXVersionMin" -arch x86_64 -dylib \
+"$0" -macosx_version_min "$macOSXVersionMin" -arch x86_64 -dylib \
     -o "$outDir/lib/lib${children[1]}.dylib" \
     -install_name "$outDir/lib/lib${children[1]}.dylib" \
     "${childrenLookup[@]}" "$symbolBloatObject" \
