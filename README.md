@@ -123,7 +123,7 @@ In the [Installation](#installation) section, the following snippet for `hpack`'
 when:
   - condition: os(darwin)
     ghc-options:
-      - -optl-fuse-ld64.ld-wrapper-macos.sh
+      - -optl-fuse-ld=ld-wrapper-macos.sh
 ```
 
 It may look strange in the above snippet that we have told GHC that the linker is `ld-wrapper-macos.sh` when the script in this repository is actually named `ld64.ld-wrapper-macos.sh`.
