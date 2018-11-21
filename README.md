@@ -4,9 +4,16 @@ Wrapper script around the system `ld` linker for macOS Haskellers to work around
 
 ## Installation
 
-1. Copy `ld64.ld-wrapper-macos.sh` to a location in the `PATH`.
-1. Make the script executable: `chmod +x <path_to_script>/ld64.ld-wrapper-macos.sh`
-1. In Haskell project files, tell GHC to use the wrapper script as the linker. An example snippet is shown below for `hpack`'s `package.yaml` format.
+1. Copy `ld64.ld-wrapper-macos.sh` to a location in the `PATH` (for example `mkdir -p ~/.local/bin` then add `export PATH=~/.local/bin:$PATH` to your `~/.bash_profile` or `~/.bashrc`)
+1. Make the script executable: `chmod 755 ~/.local/bin/ld64.ld-wrapper-macos.sh`
+
+**Note**: Ff you are using a `clang` version prior to 10.0, in step 1, you will need to rename the script to `ld.ld-wrapper-macos.sh`.
+
+If you're having trouble getting a Haskell project using this wrapper to build, and the error includes something about a "linker", please the [Troubleshooting](#troubleshooting) section below.
+
+## Usage in a Haskell project
+
+In Haskell project files, tell GHC to use the wrapper script as the linker. An example snippet is shown below for `hpack`'s `package.yaml` format.
 
 ```yaml
 when:
@@ -21,8 +28,6 @@ Optionally, a project's `.gitignore` file can be updated to ignore the working d
 # macOS ld wrapper script stuff
 .ld-wrapper-macos/
 ```
-
-Note that if you are using a `clang` version prior to 10.0, in step 1, you will need to copy the script as `ld.ld-wrapper-macos.sh` instead of as `ld64.ld-wrapper-macos.sh`.
 
 ## Synopsis
 
@@ -51,11 +56,11 @@ The `panic` package uses some Template Haskell, so GHC will be forced to create 
 The generated megarepo can be used to test the `ld64.ld-wrapper-macos.sh` script:
 
 1. Follow the wrapper script's [installation steps](#installation) so that `ld64.ld-wrapper-macos.sh` is available on the `PATH` and is executable.
-1. Generate the megarepo: `bash gen-stack-mega-repo.sh`
-1. Change directories into the newly created megarepo: `cd panic`
-1. Attempt to build the megarepo: `stack build panic` (after a lengthy build of all 750 dummy dependency packages, the GHC panic should crop up at the end when building the `panic` package itself)
-1. Uncomment the `when` condition block in the top-level `package.yaml` project file so that GHC will link with the wrapper script instead of linking using `ld` directly
-1. Run `stack build panic` again and this time it should succeed
+2. Generate the megarepo: `bash gen-stack-mega-repo.sh`
+3. Change directories into the newly created megarepo: `cd panic`
+4. Attempt to build the megarepo: `stack build panic` (after a lengthy build of all 750 dummy dependency packages, the GHC panic should crop up at the end when building the `panic` package itself)
+5. Uncomment the `when` condition block in the top-level `package.yaml` project file so that GHC will link with the wrapper script instead of linking using `ld` directly
+6. Run `stack build panic` again and this time it should succeed
 
 Note that the above was tested using `stack` version 1.6.3 and GHC version 8.2.2.
 
@@ -131,6 +136,24 @@ It may look strange in the above snippet that we have told GHC that the linker i
 Naming the script with the `ld64.` prefix exploits how `clang` looks up the linker path, so we are tricking `clang` into thinking the script is itself a linker. For details on how clang looks up the linker path, see this changeset where support for the `-fuse-ld` option was added:
 * https://reviews.llvm.org/diffusion/L/change/cfe/trunk/lib/Driver/ToolChain.cpp;211785
 * https://bugs.swift.org/browse/SR-6878
+
+## Troubleshooting
+
+If a Haskell project using this wrapper doesn't build and the error includes something about the "linker", please check the following (we assume the script was placed in `~/.local/bin`, change the commands accordingly):
+
+**Is the script in the `PATH` such that `stack` can find it?** Running the following should print the script's location:
+
+```
+$ stack exec -- which ld64.ld-wrapper-macos.sh
+~/.local/bin/ld64.ld-wrapper-macos.sh
+```
+
+**Is the script executable?** Running the following should show the correct permissions:
+
+```
+$ ls -l ~/.local/bin/ld64.ld-wrapper-macos.sh
+-rwxr-xr-x  ld64.ld-wrapper-macos.sh
+```
 
 ## Contributing
 
