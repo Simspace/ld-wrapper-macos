@@ -139,16 +139,27 @@ Naming the script with the `ld64.` prefix exploits how `clang` looks up the link
 
 ## Troubleshooting
 
-If a Haskell project using this wrapper doesn't build and the error includes something about the "linker", please check the following (we assume the script was placed in `~/.local/bin`, change the commands accordingly):
+If a Haskell project using this wrapper doesn't build and the error message looks like:
 
-**Is the script in the `PATH` such that `stack` can find it?** Running the following should print the script's location:
+```
+clang: error: invalid linker name in argument '-fuse-ld=ld-wrapper-macos.sh'
+`gcc' failed in phase `Linker'. (Exit code: 1)
+```
+
+Please check the following (we assume the script was placed in `~/.local/bin`, change the commands accordingly):
+
+**Is the script in the `PATH` such that `stack` can find it?**
+
+Running the following should print the script's location:
 
 ```
 $ stack exec -- which ld64.ld-wrapper-macos.sh
 ~/.local/bin/ld64.ld-wrapper-macos.sh
 ```
 
-**Is the script executable?** Running the following should show the correct permissions:
+**Is the script executable?**
+
+Running the following should show the correct permissions:
 
 ```
 $ ls -l ~/.local/bin/ld64.ld-wrapper-macos.sh
