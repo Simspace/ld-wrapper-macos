@@ -7,7 +7,7 @@ Wrapper script around the system `ld` linker for macOS Haskellers to work around
 1. Copy `ld64.ld-wrapper-macos.sh` to a location in the `PATH` (for example `mkdir -p ~/.local/bin` then add `export PATH=~/.local/bin:$PATH` to your `~/.bash_profile` or `~/.bashrc`)
 1. Make the script executable: `chmod 755 ~/.local/bin/ld64.ld-wrapper-macos.sh`
 
-**Note**: Ff you are using a `clang` version prior to 10.0, in step 1, you will need to rename the script to `ld.ld-wrapper-macos.sh`.
+**Note**: If you are using a `clang` version prior to 10.0, in step 1, you will need to rename the script to `ld.ld-wrapper-macos.sh`.
 
 If you're having trouble getting a Haskell project using this wrapper to build, and the error includes something about a "linker", please the [Troubleshooting](#troubleshooting) section below.
 
