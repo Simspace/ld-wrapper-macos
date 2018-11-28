@@ -4,9 +4,16 @@ Wrapper script around the system `ld` linker for macOS Haskellers to work around
 
 ## Installation
 
-1. Copy `ld64.ld-wrapper-macos.sh` to a location in the `PATH`.
-1. Make the script executable: `chmod +x <path_to_script>/ld64.ld-wrapper-macos.sh`
-1. In Haskell project files, tell GHC to use the wrapper script as the linker. An example snippet is shown below for `hpack`'s `package.yaml` format.
+1. Copy `ld64.ld-wrapper-macos.sh` to a location in the `PATH` (for example `mkdir -p ~/.local/bin` then add `export PATH=~/.local/bin:$PATH` to your `~/.bash_profile` or `~/.bashrc`)
+1. Make the script executable: `chmod 755 ~/.local/bin/ld64.ld-wrapper-macos.sh`
+
+**Note**: If you are using a `clang` version prior to 10.0, in step 1, you will need to rename the script to `ld.ld-wrapper-macos.sh`.
+
+If you're having trouble getting a Haskell project using this wrapper to build, and the error includes something about a "linker", please the [Troubleshooting](#troubleshooting) section below.
+
+## Usage in a Haskell project
+
+In Haskell project files, tell GHC to use the wrapper script as the linker. An example snippet is shown below for `hpack`'s `package.yaml` format.
 
 ```yaml
 when:
@@ -21,8 +28,6 @@ Optionally, a project's `.gitignore` file can be updated to ignore the working d
 # macOS ld wrapper script stuff
 .ld-wrapper-macos/
 ```
-
-Note that if you are using a `clang` version prior to 10.0, in step 1, you will need to copy the script as `ld.ld-wrapper-macos.sh` instead of as `ld64.ld-wrapper-macos.sh`.
 
 ## Synopsis
 
@@ -131,6 +136,35 @@ It may look strange in the above snippet that we have told GHC that the linker i
 Naming the script with the `ld64.` prefix exploits how `clang` looks up the linker path, so we are tricking `clang` into thinking the script is itself a linker. For details on how clang looks up the linker path, see this changeset where support for the `-fuse-ld` option was added:
 * https://reviews.llvm.org/diffusion/L/change/cfe/trunk/lib/Driver/ToolChain.cpp;211785
 * https://bugs.swift.org/browse/SR-6878
+
+## Troubleshooting
+
+If a Haskell project using this wrapper doesn't build and the error message looks like:
+
+```
+clang: error: invalid linker name in argument '-fuse-ld=ld-wrapper-macos.sh'
+`gcc' failed in phase `Linker'. (Exit code: 1)
+```
+
+Please check the following (we assume the script was placed in `~/.local/bin`, change the commands accordingly):
+
+**Is the script in the `PATH` such that `stack` can find it?**
+
+Running the following should print the script's location:
+
+```
+$ stack exec -- which ld64.ld-wrapper-macos.sh
+~/.local/bin/ld64.ld-wrapper-macos.sh
+```
+
+**Is the script executable?**
+
+Running the following should show the correct permissions:
+
+```
+$ ls -l ~/.local/bin/ld64.ld-wrapper-macos.sh
+-rwxr-xr-x  ld64.ld-wrapper-macos.sh
+```
 
 ## Contributing
 
