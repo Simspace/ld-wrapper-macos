@@ -327,10 +327,10 @@ declare -ra children
 
 symbolBloatObject=$outDir/obj/$outputNameLibless-symbol-hack.o
 if [[ ! -f $symbolBloatObject ]]; then
-    # `-Q` means use GNU Assembler rather than Clang, avoiding an awkward
-    # dependency cycle.
+    # `-Q` means use GNU Assembler, now deprecated on Mac OS.
+    # `-q` means use Clang Integrated Assembler.
     printf '.private_extern _______child_hack_foo\nchild_hack_foo:\n' |
-        as -Q -- -o "$symbolBloatObject"
+        as -q -- -o "$symbolBloatObject"
 fi
 
 # First half of libs
